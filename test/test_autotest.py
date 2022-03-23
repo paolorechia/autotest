@@ -5,6 +5,10 @@ working_code = """
 def sum(x: int, y: int) -> int:
     return x + y
 """
+working_code2 = """
+def sum(x: int, y: int, z: int) -> int:
+    return x + y + z
+"""
 no_return_code = """
 def sum(x: int, y: int):
     x + y
@@ -28,6 +32,7 @@ def infinite(x: int, y: int) -> int:
     "code, expected_result",
     [
         pytest.param(working_code, True, id="working_code"),
+        pytest.param(working_code2, True, id="working_code2"),
         pytest.param(no_return_code, True, id="working_code"),
         pytest.param(wrong_type_annotation, False, id="wrong_type"),
         pytest.param(syntax_error_code, False, id="syntax_error"),
