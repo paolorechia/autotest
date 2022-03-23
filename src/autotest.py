@@ -108,7 +108,7 @@ def autotest(code: str):
         )
         if not execution_result.finished:
             raise TimeoutError
-        if return_type != type(execution_result.result):
+        if return_type != type(execution_result.result):  # noqa
             raise TypeError
     except (SyntaxError, TimeoutError, TypeError) as excp:
         logger.info(excp)
