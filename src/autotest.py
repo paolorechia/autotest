@@ -1,4 +1,4 @@
-from typing import Optional, Callable, Any
+from typing import Optional, Callable, Any, Dict
 from dataclasses import dataclass
 import logging
 from multiprocessing import Process, TimeoutError, Queue
@@ -23,7 +23,7 @@ class ExecutionResult:
 
 
 def unsafe_exec(code: str, q: Queue):
-    locals_ = {}
+    locals_: Dict[str, Any] = {}
     exec(code, {}, locals_)
     q.put(locals_["result"])
     return
@@ -42,7 +42,7 @@ def execute_function(
 
     code_to_exec = code + "\n" + func_call_str
 
-    q = Queue()
+    q: Queue = Queue()
 
     p = Process(
         target=unsafe_exec,
@@ -92,7 +92,7 @@ def autotest(code: str):
         return_type = type(None)
 
         if "return" in types:
-            return_type = types.pop("return")
+            return_type = types.pop("return")  # type: ignore
         kwargs = {}
         for key, item in types.items():
             logger.info("%s %s", item, int)
