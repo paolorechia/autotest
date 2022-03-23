@@ -9,10 +9,12 @@ TIMEOUT = 0.2
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
+
 @dataclass(frozen=True)
 class AutoTestResult:
     passed: bool
     error: Optional[str] = None
+
 
 @dataclass(frozen=True)
 class ExecutionResult:
@@ -26,7 +28,10 @@ def unsafe_exec(code: str, q: Queue):
     q.put(locals_["result"])
     return
 
-def execute_function(code: str, func_name: str, python_func: Callable, **kwargs) -> ExecutionResult:
+
+def execute_function(
+    code: str, func_name: str, python_func: Callable, **kwargs
+) -> ExecutionResult:
     logger.info("Executing func: %s, kwargs=%s", func_name, kwargs)
     func_call_str = f"result = {func_name}("
     for key, item in kwargs.items():
@@ -35,13 +40,17 @@ def execute_function(code: str, func_name: str, python_func: Callable, **kwargs)
     func_call_str += ")"
     logger.info("Built function call: %s", func_call_str)
 
-
     code_to_exec = code + "\n" + func_call_str
-
 
     q = Queue()
 
-    p = Process(target=unsafe_exec, args=(code_to_exec,q,))
+    p = Process(
+        target=unsafe_exec,
+        args=(
+            code_to_exec,
+            q,
+        ),
+    )
     p.start()
 
     result = None
@@ -57,6 +66,7 @@ def execute_function(code: str, func_name: str, python_func: Callable, **kwargs)
         p.kill()
         return ExecutionResult(finished=False, result=result)
     return ExecutionResult(finished=True, result=result)
+
 
 def autotest(code: str):
     logger.info("Auto testing code...")
@@ -91,7 +101,11 @@ def autotest(code: str):
                 val = random.randint(-255, 255)
                 kwargs[key] = val
         execution_result = execute_function(code, func_name, func, **kwargs)
-        logger.info("Execution result: %s (type: %s)", execution_result, type(execution_result.result))
+        logger.info(
+            "Execution result: %s (type: %s)",
+            execution_result,
+            type(execution_result.result),
+        )
         if not execution_result.finished:
             raise TimeoutError
         if return_type != type(execution_result.result):

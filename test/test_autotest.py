@@ -28,6 +28,7 @@ def infinite(x: int, y: int) -> int:
         x + y
 """
 
+
 @pytest.mark.parametrize(
     "code, expected_result",
     [
@@ -37,7 +38,7 @@ def infinite(x: int, y: int) -> int:
         pytest.param(wrong_type_annotation, False, id="wrong_type"),
         pytest.param(syntax_error_code, False, id="syntax_error"),
         pytest.param(infinite_loop_code, False, id="infinite_loop"),
-    ]
+    ],
 )
 def test_autotest(code, expected_result):
     result = auto.autotest(code)
