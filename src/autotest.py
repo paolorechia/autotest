@@ -4,7 +4,7 @@ import logging
 from multiprocessing import Process, TimeoutError, Queue
 import random
 
-TIMEOUT = 0.2
+TIMEOUT = 1
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
